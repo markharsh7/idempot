@@ -174,8 +174,18 @@ Override params: `ttl`, `required`, `lock_timeout`, `cache_on_status`, `max_body
 
 ## Backends
 
-- **Memory** (default, dev): dict-backed, no persistence
-- **Redis** (prod): `SETNX` locks, `SETEX` caching with TTL, key prefix isolation
+- **Memory** (default): dict-backed, per-process. Works for dev and single-worker
+  deployments. Not suitable for production with multiple workers — each process
+  has its own cache, so idempotency breaks across workers.
+- **Redis** (prod): `SETNX` locks, `SETEX` caching with TTL, key prefix isolation.
+  Shared across all workers and servers. Use `configure(backend="redis")`.
+
+## Production Checklist
+
+- [ ] `configure(backend="redis", redis_url="...")` called at startup
+- [ ] Redis reachable from all app instances
+- [ ] `lock_timeout` tuned for your slowest endpoint
+- [ ] `default_ttl` covers your retry window (e.g., 86400 = 24h)
 
 ## License
 
