@@ -1,6 +1,6 @@
 # idempot
 
-Idempotency for APIs via decorators. Framework-agnostic core with adapters for FastAPI and Flask.
+Idempotency for APIs via decorators. Framework-agnostic core with adapters for FastAPI and Flask (Open to contribution for more Framework Adapters).
 
 ## Install
 
